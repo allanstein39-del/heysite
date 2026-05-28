@@ -137,6 +137,17 @@ function JobsScreen({ navigate, onSubmit }){
   const submit = (e) => {
     e.preventDefault();
     if (!valid) return;
+    const fd = new FormData();
+    fd.append('entry.1365861656', data.nome);
+    fd.append('entry.51953079',   data.whats);
+    fd.append('entry.289573353',  data.idade);
+    fd.append('entry.238213810',  data.bairro);
+    fd.append('entry.787784276',  data.vaga);
+    fd.append('entry.1415021885', data.experiencia);
+    fd.append('entry.1999529634', data.disponibilidade);
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSeWT-0SsPQ7bRCazqhbQJ3wHryihEoVgCW_LchWxSVPleC5-A/formResponse', {
+      method: 'POST', mode: 'no-cors', body: fd,
+    }).catch(() => {});
     onSubmit(data);
   };
 
