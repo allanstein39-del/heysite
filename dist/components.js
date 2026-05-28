@@ -223,13 +223,14 @@ function Logo({
 
 /* ─── Home Logo (PNG da marca) ─────────────────────────── */
 function HomeLogo() {
-  const R = window.__resources || {};
   return /*#__PURE__*/React.createElement("span", {
     className: "home-logo",
     "aria-label": "hey! burgers"
   }, /*#__PURE__*/React.createElement("img", {
-    src: R.logoHome || "assets/logoo.png",
-    alt: "Hey! Burgers"
+    src: "assets/logoo.webp",
+    alt: "Hey! Burgers",
+    width: "480",
+    height: "366"
   }));
 }
 

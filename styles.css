@@ -539,7 +539,7 @@ html[data-layout="grid"] .home-footer{ max-width:520px; margin-left:auto;margin-
 }
 .jobs-hero::before{
   content:"";position:absolute;inset:0;
-  background:url("assets/burger-03.jpg") center/cover no-repeat;
+  background:url("assets/burger-03.webp") center/cover no-repeat;
   opacity:.18;
   mix-blend-mode:luminosity;
 }
