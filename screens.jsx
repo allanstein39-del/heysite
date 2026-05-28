@@ -17,7 +17,7 @@ function HomeScreen({ tweaks, navigate }) {
     {
       id: "ifood",
       title: "iFood",
-      sub: "peça pelo app",
+      sub: "Peça pelo App",
       href: "https://urlgeni.us/ifood/heyburgersc",
       icon: "assets/icon-ifood.webp",
       photo: "assets/burger_ifood_crop.png",
