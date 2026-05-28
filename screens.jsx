@@ -43,7 +43,7 @@ function HomeScreen({ tweaks, navigate }) {
   return (
     <section className="home" data-screen-label="01 Home">
       <div className="home-hero">
-        <window.Logo className="home-logo"/>
+        <window.HomeLogo/>
       </div>
 
       <div className="banner" aria-hidden="true">
