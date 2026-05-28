@@ -144,7 +144,7 @@ function Header({ screen, navigate }){
           className=""
           onClick={()=>navigate("home")}>Home</button>
         <button
-          className={screen==="jobs" || screen==="success" ? "is-active" : ""}
+          className=""
           onClick={()=>navigate("jobs")}>Trabalhe conosco</button>
         <a className="header-nav-evento" href="https://wa.me/5516996294093?text=Ol%C3%A1%2C+tudo+bem%3F+Gostaria+de+fazer+um+evento+com+a+Hey%21&utm_source=chatgpt.com"
            target="_blank" rel="noopener noreferrer">Hey! no seu evento</a>
