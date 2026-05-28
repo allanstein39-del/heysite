@@ -44,10 +44,6 @@ function HomeScreen({ tweaks, navigate }) {
     <section className="home" data-screen-label="01 Home">
       <div className="home-hero">
         <window.Logo className="home-logo"/>
-        <div className="hours">
-          <window.Icon.Clock/>
-          <span>Terça a Domingo · 11h às 22h</span>
-        </div>
       </div>
 
       <div className="banner" aria-hidden="true">
@@ -77,7 +73,10 @@ function HomeScreen({ tweaks, navigate }) {
           <window.Icon.Right/>
         </button>
         <div className="home-foot-meta">
-          delivery only · são carlos · sc
+          Terça a Domingo · delivery only · São Carlos - SP
+        </div>
+        <div className="home-foot-dev">
+          Desenvolvido por <a href="https://adoisc.com.br" target="_blank" rel="noopener noreferrer">Adois - Comunicação Integrativa</a>
         </div>
       </footer>
     </section>

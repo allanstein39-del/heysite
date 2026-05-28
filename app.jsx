@@ -132,10 +132,6 @@ function Header({ screen, navigate }){
 
       <span className="header-spacer"/>
 
-      <span className="header-hours">
-        <span className="dot"/>Terça a Domingo · 11h às 22h
-      </span>
-
       <div className="header-socials">
         {socials.map(s => (
           <a key={s.id} href={s.href} target="_blank" rel="noopener noreferrer"

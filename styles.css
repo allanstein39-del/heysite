@@ -531,6 +531,18 @@ html[data-layout="grid"] .home-footer{ max-width:520px; margin-left:auto;margin-
   font-size:11px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink-faint);
 }
+.home-foot-dev{
+  margin-top:10px;
+  font-size:11px;letter-spacing:.04em;
+  color:var(--ink-faint);
+}
+.home-foot-dev a{
+  text-decoration:underline;
+  text-underline-offset:3px;
+  color:var(--ink-faint);
+  transition:color .2s var(--ease);
+}
+.home-foot-dev a:hover{color:var(--ink);}
 
 /* ─── Trabalhe Conosco screen ───────────────────────────── */
 .jobs{
