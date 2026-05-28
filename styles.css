@@ -522,6 +522,8 @@ html[data-layout="grid"] .home-footer{ max-width:520px; margin-left:auto;margin-
   transition:transform .2s var(--ease), background .2s var(--ease);
 }
 .jobs-cta:hover{transform:translateY(-1px);}
+.jobs-cta:focus{outline:none;}
+.jobs-cta:focus-visible{outline:none;}
 .jobs-cta svg{width:14px;height:14px;}
 .home-foot-meta{
   margin-top:18px;
