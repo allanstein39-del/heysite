@@ -88,33 +88,51 @@ function HomeScreen({ tweaks, navigate }) {
 
 /* ─── Trabalhe Conosco ────────────────────────────────── */
 const VAGAS = [
-  "Auxiliar de cozinha",
-  "Chapeiro",
-  "Atendente de pedidos (online)",
-  "Motoboy / Entregador",
-  "Auxiliar de produção",
-  "Embalador / Expedição",
+  { value:"Auxiliar de cozinha",        desc:"montagem de lanches, bebidas e preparações" },
+  { value:"Cozinheiro(a) / Chapeira(a)", desc:"o de auxiliar + chapas, fritadeiras, fogões" },
+  { value:"Atendente",                   desc:"atendimento ao cliente, caixa, rotas de delivery" },
+  { value:"Operador de Delivery",        desc:"aceitar pedidos, fazer bebidas, fazer rotas" },
 ];
-const TURNOS = [
-  { id:"manha",    label:"Manhã",    range:"11h às 15h" },
-  { id:"tarde",    label:"Tarde",    range:"15h às 19h" },
-  { id:"noite",    label:"Noite",    range:"19h às 23h" },
-  { id:"integral", label:"Integral", range:"11h às 23h" },
+const EXPERIENCIA = [
+  "Sim, mais de 1 ano",
+  "Sim, menos de 1 ano",
+  "Não tenho experiência",
 ];
+const DISPONIBILIDADE = [
+  "Sim",
+  "Sim, mas tenho restrições",
+  "Não",
+];
+
+function RadioGroup({ name, options, value, onChange, withDesc }){
+  return (
+    <div className="radio-group">
+      {options.map(opt => {
+        const val = withDesc ? opt.value : opt;
+        const desc = withDesc ? opt.desc : null;
+        const checked = value === val;
+        return (
+          <label key={val} className={"radio-opt " + (checked ? "is-on" : "")}>
+            <input type="radio" name={name} value={val}
+              checked={checked} onChange={() => onChange(val)}/>
+            <span className="radio-label">{val}</span>
+            {desc && <span className="radio-desc">{desc}</span>}
+          </label>
+        );
+      })}
+    </div>
+  );
+}
 
 function JobsScreen({ navigate, onSubmit }){
   const [data, setData] = useStateS({
-    nome:"", email:"", whats:"", cidade:"",
-    vaga:"", experiencia:"", turnos:[],
-    curriculo:null,
+    nome:"", whats:"", idade:"", bairro:"",
+    vaga:"", experiencia:"", disponibilidade:"",
   });
   const set = (k,v) => setData(d => ({...d, [k]:v}));
-  const toggleTurno = (id) => {
-    setData(d => ({...d, turnos: d.turnos.includes(id) ? d.turnos.filter(t=>t!==id) : [...d.turnos, id]}));
-  };
-  const fileInput = useRefS(null);
 
-  const valid = data.nome && data.email && data.whats && data.cidade && data.vaga && data.turnos.length;
+  const valid = data.nome && data.whats && data.idade && data.bairro
+    && data.vaga && data.experiencia && data.disponibilidade;
 
   const submit = (e) => {
     e.preventDefault();
@@ -166,77 +184,43 @@ function JobsScreen({ navigate, onSubmit }){
 
           <div className="field-row">
             <div className="field">
-              <label>E-mail<span className="req">*</span></label>
-              <input className="input" type="email"
-                value={data.email} onChange={e=>set("email",e.target.value)}
-                placeholder="voce@email.com" required/>
-            </div>
-            <div className="field">
-              <label>WhatsApp<span className="req">*</span></label>
+              <label>Qual seu WhatsApp? (com DDD)<span className="req">*</span></label>
               <input className="input" type="tel"
                 value={data.whats} onChange={e=>set("whats",e.target.value)}
                 placeholder="(16) 99999-9999" required/>
             </div>
-          </div>
-
-          <div className="field">
-            <label>Cidade / bairro<span className="req">*</span></label>
-            <input className="input" type="text"
-              value={data.cidade} onChange={e=>set("cidade",e.target.value)}
-              placeholder="São Carlos / Centro" required/>
-            <span className="hint">A gente atende São Carlos e região, mas conta da onde você é.</span>
-          </div>
-
-          <div className="field">
-            <label>Vaga de interesse<span className="req">*</span></label>
-            <select className="select"
-              value={data.vaga} onChange={e=>set("vaga",e.target.value)}
-              required>
-              <option value="" disabled>Selecione a vaga</option>
-              {VAGAS.map(v => <option key={v} value={v}>{v}</option>)}
-            </select>
-          </div>
-
-          <div className="field">
-            <label>Disponibilidade de turno<span className="req">*</span></label>
-            <div className="shifts">
-              {TURNOS.map(t => (
-                <button key={t.id} type="button"
-                  className={"shift " + (data.turnos.includes(t.id) ? "is-on" : "")}
-                  onClick={()=>toggleTurno(t.id)}>
-                  {t.label}<small>{t.range}</small>
-                </button>
-              ))}
+            <div className="field">
+              <label>Qual sua idade?<span className="req">*</span></label>
+              <input className="input" type="number" min="14" max="99"
+                value={data.idade} onChange={e=>set("idade",e.target.value)}
+                placeholder="Ex: 22" required/>
             </div>
-            <span className="hint">Pode marcar mais de um.</span>
           </div>
 
           <div className="field">
-            <label>Experiência anterior</label>
-            <textarea className="textarea"
-              value={data.experiencia} onChange={e=>set("experiencia",e.target.value)}
-              placeholder="Conta brevemente onde você trabalhou, o que fez, o que aprendeu. Pode ser informal — a gente lê tudo." />
+            <label>Qual bairro você mora?<span className="req">*</span></label>
+            <input className="input" type="text"
+              value={data.bairro} onChange={e=>set("bairro",e.target.value)}
+              placeholder="Ex: Centro, Vila Prado..." required/>
           </div>
 
           <div className="field">
-            <label>Currículo (PDF)</label>
-            <label className={"file-drop " + (data.curriculo ? "has-file":"")}>
-              <input ref={fileInput} type="file" accept="application/pdf"
-                onChange={e => set("curriculo", e.target.files?.[0] || null)}/>
-              <span className="file-icon">
-                {data.curriculo ? <window.Icon.Check/> : <window.Icon.Doc/>}
-              </span>
-              <span className="file-text">
-                <span className="t">
-                  {data.curriculo ? data.curriculo.name : "Anexar currículo (opcional)"}
-                </span>
-                <span className="s">
-                  {data.curriculo
-                    ? `${(data.curriculo.size/1024).toFixed(0)} KB · clique para trocar`
-                    : "PDF até 5 MB · arrasta ou clica"}
-                </span>
-              </span>
-            </label>
+            <label>Vaga de Interesse<span className="req">*</span></label>
+            <RadioGroup name="vaga" options={VAGAS} value={data.vaga}
+              onChange={v=>set("vaga",v)} withDesc={true}/>
+          </div>
+
+          <div className="field">
+            <label>Tem experiência na vaga desejada?<span className="req">*</span></label>
+            <RadioGroup name="experiencia" options={EXPERIENCIA} value={data.experiencia}
+              onChange={v=>set("experiencia",v)}/>
+          </div>
+
+          <div className="field">
+            <label>Você tem disponibilidade para escala 6x1, de terça a domingo?<span className="req">*</span></label>
+            <span className="hint">Trabalhamos de terça a domingo, com folga semanal de 1 dia (segunda)</span>
+            <RadioGroup name="disponibilidade" options={DISPONIBILIDADE} value={data.disponibilidade}
+              onChange={v=>set("disponibilidade",v)}/>
           </div>
 
           <button className="submit" type="submit" disabled={!valid}>
