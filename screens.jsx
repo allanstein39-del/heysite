@@ -54,7 +54,15 @@ function HomeScreen({ tweaks, navigate }) {
         {links.map(l => (
           <li key={l.id}>
             <a className="link" href={l.href} target="_blank" rel="noopener noreferrer">
-              <span className="link-photo" style={{backgroundImage:`url(${l.photo})`}}/>
+              <img
+                className="link-photo"
+                src={l.photo}
+                alt=""
+                aria-hidden="true"
+                width="900" height="600"
+                fetchpriority={l.id === "cardapio" ? "high" : "auto"}
+                loading={l.id === "cardapio" ? "eager" : "lazy"}
+              />
               <span className="link-overlay"/>
               <img className="link-sticker" src={l.icon} alt=""/>
               <span className="link-body">
