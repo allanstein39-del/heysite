@@ -139,6 +139,14 @@ function RadioGroup({ name, options, value, onChange, withDesc }){
   );
 }
 
+function fmtPhone(d){
+  if(!d) return "";
+  if(d.length<=2) return "("+d;
+  if(d.length<=6) return "("+d.slice(0,2)+") "+d.slice(2);
+  if(d.length<=10) return "("+d.slice(0,2)+") "+d.slice(2,6)+"-"+d.slice(6);
+  return "("+d.slice(0,2)+") "+d.slice(2,7)+"-"+d.slice(7);
+}
+
 function JobsScreen({ navigate, onSubmit }){
   const [data, setData] = useStateS({
     nome:"", whats:"", idade:"", bairro:"",
@@ -212,9 +220,9 @@ function JobsScreen({ navigate, onSubmit }){
             <div className="field">
               <label>Qual seu WhatsApp? (com DDD)<span className="req">*</span></label>
               <input className="input" type="tel"
-                value={data.whats}
+                value={fmtPhone(data.whats)}
                 onChange={e=>set("whats", e.target.value.replace(/\D/g,"").slice(0,11))}
-                placeholder="16999994444" inputMode="numeric" required/>
+                placeholder="(16) 99999-4444" inputMode="numeric" required/>
             </div>
             <div className="field">
               <label>Qual sua idade?<span className="req">*</span></label>

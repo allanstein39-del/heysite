@@ -156,6 +156,13 @@ function RadioGroup({
     }, desc));
   }));
 }
+function fmtPhone(d) {
+  if (!d) return "";
+  if (d.length <= 2) return "(" + d;
+  if (d.length <= 6) return "(" + d.slice(0, 2) + ") " + d.slice(2);
+  if (d.length <= 10) return "(" + d.slice(0, 2) + ") " + d.slice(2, 6) + "-" + d.slice(6);
+  return "(" + d.slice(0, 2) + ") " + d.slice(2, 7) + "-" + d.slice(7);
+}
 function JobsScreen({
   navigate,
   onSubmit
@@ -245,9 +252,9 @@ function JobsScreen({
   }, "*")), /*#__PURE__*/React.createElement("input", {
     className: "input",
     type: "tel",
-    value: data.whats,
+    value: fmtPhone(data.whats),
     onChange: e => set("whats", e.target.value.replace(/\D/g, "").slice(0, 11)),
-    placeholder: "16999994444",
+    placeholder: "(16) 99999-4444",
     inputMode: "numeric",
     required: true
   })), /*#__PURE__*/React.createElement("div", {

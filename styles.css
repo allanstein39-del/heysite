@@ -520,10 +520,11 @@ html[data-layout="grid"] .home-footer{ max-width:520px; margin-left:auto;margin-
   font-weight:700;font-size:14px;
   letter-spacing:.04em;
   transition:transform .2s var(--ease), background .2s var(--ease);
+  outline:none;
+  -webkit-tap-highlight-color:transparent;
 }
 .jobs-cta:hover{transform:translateY(-1px);}
-.jobs-cta:focus{outline:none;}
-.jobs-cta:focus-visible{outline:none;}
+.jobs-cta:focus,.jobs-cta:focus-visible,.jobs-cta:active{outline:none;box-shadow:none;}
 .jobs-cta svg{width:14px;height:14px;}
 .home-foot-meta{
   margin-top:18px;
