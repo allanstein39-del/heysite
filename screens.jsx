@@ -9,7 +9,7 @@ function HomeScreen({ tweaks, navigate }) {
     {
       id: "cardapio",
       title: <>Card<window.Acc base="a" mark="acute"/>pio digital</>,
-      sub: "melhores preços + exclusivos",
+      sub: "Aqui tem Cashback",
       href: "https://pedido.anota.ai/loja/hey-burgers-hamburgueria?f=msa",
       icon: "assets/icon-cardapio.webp",
       photo: "assets/burger-01.webp",
@@ -20,7 +20,7 @@ function HomeScreen({ tweaks, navigate }) {
       sub: "peça pelo app",
       href: "https://urlgeni.us/ifood/heyburgersc",
       icon: "assets/icon-ifood.webp",
-      photo: "assets/burger-02.webp",
+      photo: "assets/burger_ifood_crop.png",
     },
     {
       id: "whatsapp",
