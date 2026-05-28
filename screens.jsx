@@ -253,12 +253,6 @@ function SuccessScreen({ name, navigate }){
       <h1 className="success-title">
         Recebido,<br/><em>{(name||"chef").split(" ")[0]}!</em>
       </h1>
-      <p className="success-sub">
-        Sua candidatura caiu na nossa cozinha. A gente lê tudo e
-        responde em até 5 dias úteis pelo WhatsApp que você cadastrou.
-        Enquanto isso, dá uma olhada no cardápio — quem sabe rola um
-        smash aí.
-      </p>
       <div className="success-actions">
         <a className="jobs-cta" href="https://pedido.anota.ai/loja/hey-burgers-hamburgueria?f=msa"
            target="_blank" rel="noopener noreferrer">
