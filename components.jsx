@@ -49,44 +49,12 @@ function Logo({className}){
   );
 }
 
-/* ─── Home Logo (novo logo da marca) ───────────────────── */
+/* ─── Home Logo (PNG da marca) ─────────────────────────── */
 function HomeLogo(){
+  const R = (window.__resources || {});
   return (
-    <span className="logo home-logo" aria-label="hey! burgers">
-      <svg viewBox="0 0 620 310" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" fill="#A30F15">
-        {/* HEY! */}
-        <text x="0" y="202"
-          fontFamily="'Graphik', 'Arial Black', system-ui, sans-serif"
-          fontWeight="900" fontSize="205" letterSpacing="-6"
-          textLength="370" lengthAdjust="spacingAndGlyphs">HEY!</text>
-
-        {/* Burger icon — pole */}
-        <line x1="500" y1="6" x2="500" y2="78" stroke="#A30F15" strokeWidth="9" strokeLinecap="round"/>
-        {/* Flag */}
-        <polygon points="500,6 466,21 500,36"/>
-        {/* Top bun ring */}
-        <ellipse cx="476" cy="88" rx="56" ry="20" fill="none" stroke="#A30F15" strokeWidth="12" strokeLinecap="round"/>
-        {/* Sesame seeds */}
-        <circle cx="452" cy="86" r="5.5"/>
-        <circle cx="446" cy="96" r="5.5"/>
-        <circle cx="439" cy="87" r="5.5"/>
-        {/* Layer 1 */}
-        <path d="M420,112 Q448,122 476,120 Q504,118 532,112 L532,130 Q504,140 476,142 Q448,140 420,130 Z"/>
-        {/* Gap */}
-        <path d="M420,130 Q448,140 476,142 Q504,140 532,130 L532,138 Q504,148 476,150 Q448,148 420,138 Z" fill="#F2E9D6"/>
-        {/* Layer 2 */}
-        <path d="M420,138 Q448,148 476,150 Q504,148 532,138 L532,156 Q504,166 476,168 Q448,166 420,156 Z"/>
-        {/* Bottom bun */}
-        <path d="M422,156 Q448,164 476,165 Q504,164 530,156 Q535,168 532,177 Q516,190 476,191 Q436,190 420,177 Q417,168 422,156 Z"/>
-        {/* ® */}
-        <text x="536" y="78" fontFamily="'Graphik', Arial, sans-serif" fontWeight="400" fontSize="26">®</text>
-
-        {/* BURGERS */}
-        <text x="0" y="302"
-          fontFamily="'Graphik', 'Arial Black', system-ui, sans-serif"
-          fontWeight="900" fontSize="158" letterSpacing="-3"
-          textLength="620" lengthAdjust="spacingAndGlyphs">BURGERS</text>
-      </svg>
+    <span className="home-logo" aria-label="hey! burgers">
+      <img src={R.logoHome || "assets/logoo.png"} alt="Hey! Burgers"/>
     </span>
   );
 }
