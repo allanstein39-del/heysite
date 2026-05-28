@@ -160,22 +160,22 @@ function Header({
   const socials = [{
     id: "cardapio",
     href: "https://pedido.anota.ai/loja/hey-burgers-hamburgueria?f=msa",
-    icon: R.iconCardapio || "assets/icon-cardapio.png",
+    icon: "assets/icon-cardapio.webp",
     label: "Cardápio digital"
   }, {
     id: "ifood",
     href: "https://urlgeni.us/ifood/heyburgersc",
-    icon: R.iconIfood || "assets/icon-ifood.png",
+    icon: "assets/icon-ifood.webp",
     label: "iFood"
   }, {
     id: "whatsapp",
     href: "https://wa.me/5516996294093",
-    icon: R.iconWhats || "assets/icon-whats.png",
+    icon: "assets/icon-whats.webp",
     label: "WhatsApp"
   }, {
     id: "instagram",
     href: "https://www.instagram.com/heyburgers/",
-    icon: R.iconInstagram || "assets/icon-instagram.png",
+    icon: "assets/icon-instagram.webp",
     label: "Instagram"
   }];
   return /*#__PURE__*/React.createElement("header", {
