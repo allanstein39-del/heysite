@@ -8,15 +8,20 @@
   <link rel="canonical" href="https://heyburgers.com.br">
   <link rel="icon" href="assets/favicon.png" type="image/png">
 
-  <!-- Preload LCP image (first burger card) -->
-  <link rel="preload" as="image" href="assets/burger-01.jpg" fetchpriority="high">
+  <!-- Preload LCP image -->
+  <link rel="preload" as="image" href="assets/burger-01.webp" fetchpriority="high" type="image/webp">
 
-  <!-- Critical CSS inline to avoid render-blocking -->
+  <!-- Preload critical fonts to avoid CLS from font swap -->
+  <link rel="preload" href="fonts/GraphikXXXXCondensed-Bold.otf" as="font" type="font/otf" crossorigin>
+  <link rel="preload" href="fonts/Graphik-Regular.otf" as="font" type="font/otf" crossorigin>
+
+  <!-- Critical CSS inline -->
   <style>
     *,*::before,*::after{box-sizing:border-box;}
     html,body{margin:0;padding:0;}
     html{background:#D71920;}
     body{min-height:100dvh;overflow-x:hidden;}
+    #root{min-height:100dvh;}
     .page-loader{
       position:fixed;inset:0;z-index:1000;
       background:#D71920;
@@ -26,21 +31,24 @@
     }
     .page-loader-logo{width:300px;color:#F2E9D6;}
     @keyframes loaderOut{from{opacity:1;}to{opacity:0;}}
+    /* Reserve space for logo to prevent CLS */
+    .home-logo{width:480px;max-width:88%;margin:0;}
+    .home-logo img{display:block;width:100%;height:auto;}
   </style>
 
   <!-- Full stylesheet -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- React + ReactDOM -->
-  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- React + ReactDOM (defer = non-blocking download, executes in order after parse) -->
+  <script defer crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script defer crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
 
-  <script src="dist/components.js"></script>
-  <script src="dist/tweaks-panel.js"></script>
-  <script src="dist/screens.js"></script>
-  <script src="dist/app.js"></script>
+  <script defer src="dist/components.js"></script>
+  <script defer src="dist/tweaks-panel.js"></script>
+  <script defer src="dist/screens.js"></script>
+  <script defer src="dist/app.js"></script>
 </body>
 </html>

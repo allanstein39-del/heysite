@@ -51,10 +51,9 @@ function Logo({className}){
 
 /* ─── Home Logo (PNG da marca) ─────────────────────────── */
 function HomeLogo(){
-  const R = (window.__resources || {});
   return (
     <span className="home-logo" aria-label="hey! burgers">
-      <img src={R.logoHome || "assets/logoo.png"} alt="Hey! Burgers"/>
+      <img src="assets/logoo.webp" alt="Hey! Burgers" width="480" height="366"/>
     </span>
   );
 }

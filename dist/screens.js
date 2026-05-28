@@ -20,29 +20,29 @@ function HomeScreen({
     }), "pio digital"),
     sub: "melhores preços + exclusivos",
     href: "https://pedido.anota.ai/loja/hey-burgers-hamburgueria?f=msa",
-    icon: R.iconCardapio || "assets/icon-cardapio.png",
-    photo: R.burger1 || "assets/burger-01.jpg"
+    icon: "assets/icon-cardapio.webp",
+    photo: "assets/burger-01.webp"
   }, {
     id: "ifood",
     title: "iFood",
     sub: "peça pelo app",
     href: "https://urlgeni.us/ifood/heyburgersc",
-    icon: R.iconIfood || "assets/icon-ifood.png",
-    photo: R.burger2 || "assets/burger-02.jpg"
+    icon: "assets/icon-ifood.webp",
+    photo: "assets/burger-02.webp"
   }, {
     id: "whatsapp",
     title: "WhatsApp",
     sub: "(16) 99629-4093",
     href: "https://wa.me/5516996294093",
-    icon: R.iconWhats || "assets/icon-whats.png",
-    photo: R.burger3 || "assets/burger-03.jpg"
+    icon: "assets/icon-whats.webp",
+    photo: "assets/burger-03.webp"
   }, {
     id: "instagram",
     title: "Instagram",
     sub: "@heyburgers",
     href: "https://www.instagram.com/heyburgers/",
-    icon: R.iconInstagram || "assets/icon-instagram.png",
-    photo: R.burger4 || "assets/burger-04.jpg"
+    icon: "assets/icon-instagram.webp",
+    photo: "assets/burger-04.webp"
   }];
   return /*#__PURE__*/React.createElement("section", {
     className: "home",
