@@ -173,7 +173,7 @@ function JobsScreen({
     ...d,
     [k]: v
   }));
-  const valid = data.nome && data.whats && data.idade && data.bairro && data.vaga && data.experiencia && data.disponibilidade;
+  const valid = data.nome && data.whats.length >= 10 && data.idade && data.bairro && data.vaga && data.experiencia && data.disponibilidade;
   const submit = e => {
     e.preventDefault();
     if (!valid) return;
@@ -246,8 +246,9 @@ function JobsScreen({
     className: "input",
     type: "tel",
     value: data.whats,
-    onChange: e => set("whats", e.target.value),
-    placeholder: "(16) 99999-9999",
+    onChange: e => set("whats", e.target.value.replace(/\D/g, "").slice(0, 11)),
+    placeholder: "16999994444",
+    inputMode: "numeric",
     required: true
   })), /*#__PURE__*/React.createElement("div", {
     className: "field"

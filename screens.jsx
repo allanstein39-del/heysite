@@ -146,7 +146,7 @@ function JobsScreen({ navigate, onSubmit }){
   });
   const set = (k,v) => setData(d => ({...d, [k]:v}));
 
-  const valid = data.nome && data.whats && data.idade && data.bairro
+  const valid = data.nome && data.whats.length >= 10 && data.idade && data.bairro
     && data.vaga && data.experiencia && data.disponibilidade;
 
   const submit = (e) => {
@@ -212,8 +212,9 @@ function JobsScreen({ navigate, onSubmit }){
             <div className="field">
               <label>Qual seu WhatsApp? (com DDD)<span className="req">*</span></label>
               <input className="input" type="tel"
-                value={data.whats} onChange={e=>set("whats",e.target.value)}
-                placeholder="(16) 99999-9999" required/>
+                value={data.whats}
+                onChange={e=>set("whats", e.target.value.replace(/\D/g,"").slice(0,11))}
+                placeholder="16999994444" inputMode="numeric" required/>
             </div>
             <div className="field">
               <label>Qual sua idade?<span className="req">*</span></label>
