@@ -190,7 +190,7 @@ function Header({
   }, /*#__PURE__*/React.createElement(window.Logo, null)), /*#__PURE__*/React.createElement("nav", {
     className: "header-nav"
   }, /*#__PURE__*/React.createElement("button", {
-    className: screen === "home" ? "is-active" : "",
+    className: "",
     onClick: () => navigate("home")
   }, "Home"), /*#__PURE__*/React.createElement("button", {
     className: screen === "jobs" || screen === "success" ? "is-active" : "",

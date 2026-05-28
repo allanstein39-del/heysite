@@ -141,7 +141,7 @@ function Header({ screen, navigate }){
 
       <nav className="header-nav">
         <button
-          className={screen==="home" ? "is-active" : ""}
+          className=""
           onClick={()=>navigate("home")}>Home</button>
         <button
           className={screen==="jobs" || screen==="success" ? "is-active" : ""}
