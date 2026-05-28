@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Cream blob background -->
+  <ellipse cx="105" cy="122" rx="94" ry="78" fill="#F2E9D6"/>
+  <!-- Flag pole -->
+  <line x1="130" y1="22" x2="130" y2="82" stroke="#A30F15" stroke-width="9" stroke-linecap="round"/>
+  <!-- Flag pennant (pointing left) -->
+  <polygon points="130,22 98,36 130,50" fill="#A30F15"/>
+  <!-- Top bun ring -->
+  <ellipse cx="108" cy="90" rx="54" ry="19" fill="none" stroke="#A30F15" stroke-width="12" stroke-linecap="round"/>
+  <!-- Sesame seed dots -->
+  <circle cx="86" cy="88" r="5.5" fill="#A30F15"/>
+  <circle cx="80" cy="97" r="5.5" fill="#A30F15"/>
+  <circle cx="73" cy="88" r="5.5" fill="#A30F15"/>
+  <!-- Burger layer 1 -->
+  <path d="M54,112 Q78,122 108,120 Q138,118 162,112 L162,130 Q138,140 108,142 Q78,140 54,130 Z" fill="#A30F15"/>
+  <!-- White gap -->
+  <path d="M54,130 Q78,140 108,142 Q138,140 162,130 L162,138 Q138,148 108,150 Q78,148 54,138 Z" fill="#F2E9D6"/>
+  <!-- Burger layer 2 -->
+  <path d="M54,138 Q78,148 108,150 Q138,148 162,138 L162,156 Q138,166 108,168 Q78,166 54,156 Z" fill="#A30F15"/>
+  <!-- Bottom bun -->
+  <path d="M56,156 Q80,163 108,164 Q136,163 160,156 Q165,168 162,176 Q146,188 108,189 Q70,188 54,176 Q51,168 56,156 Z" fill="#A30F15"/>
+</svg>

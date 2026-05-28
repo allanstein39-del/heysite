@@ -1,6 +1,20 @@
 // Hey! Burgers — main app with Tweaks panel
 const { useState: useAppState, useEffect: useAppEffect } = React;
 
+function PageLoader() {
+  const [visible, setVisible] = useAppState(true);
+  useAppEffect(() => {
+    const t = setTimeout(() => setVisible(false), 1800);
+    return () => clearTimeout(t);
+  }, []);
+  if (!visible) return null;
+  return (
+    <div className="page-loader">
+      <window.Logo className="page-loader-logo"/>
+    </div>
+  );
+}
+
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "bg": "red",
   "btn": "filled",
@@ -38,6 +52,7 @@ function App() {
 
   return (
     <div className="app">
+      <PageLoader/>
       <Header screen={screen} navigate={navigate}/>
 
       {screen === "home"   && <window.HomeScreen tweaks={tweaks} navigate={navigate}/>}
@@ -131,10 +146,6 @@ function Header({ screen, navigate }){
       </nav>
 
       <span className="header-spacer"/>
-
-      <span className="header-hours">
-        <span className="dot"/>Terça a Domingo · 11h às 22h
-      </span>
 
       <div className="header-socials">
         {socials.map(s => (

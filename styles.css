@@ -135,6 +135,22 @@ body::before{
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
+/* ─── Page loader ───────────────────────────────────────── */
+.page-loader{
+  position:fixed;inset:0;z-index:1000;
+  background:var(--hey-red);
+  display:flex;align-items:center;justify-content:center;
+  animation:loaderOut .5s var(--ease) 1.4s both;
+  pointer-events:none;
+}
+.page-loader-logo{
+  width:300px;color:var(--hey-cream);
+}
+@keyframes loaderOut{
+  from{opacity:1;}
+  to{opacity:0;}
+}
+
 /* ─── App shell ─────────────────────────────────────────── */
 .app{
   position:relative;
@@ -295,8 +311,8 @@ html[data-bg="cream"] .banner-strip{ mix-blend-mode:multiply; filter:none; }
   display:none;
 }
 .home-logo{
-  width:480px;max-width:84%;
-  margin:0;color:var(--ink);
+  width:480px;max-width:88%;
+  margin:0;color:var(--hey-red);
 }
 .home-handle{
   display:none;
@@ -314,11 +330,10 @@ html[data-bg="cream"] .banner-strip{ mix-blend-mode:multiply; filter:none; }
 
 @media (max-width:640px){
   .home-hero{padding:28px 20px 24px;gap:14px;}
-  .home-logo{width:360px;max-width:84%;}
+  .home-logo{width:360px;max-width:88%;}
 }
 @media (max-width:380px){
-  .home-logo{width:260px;max-width:88%;}
-  .hours{font-size:12px;padding:9px 14px;}
+  .home-logo{width:280px;max-width:90%;}
 }
 
 /* Link buttons — full-bleed burger photo + sticker icon, edge-to-edge */
@@ -531,6 +546,18 @@ html[data-layout="grid"] .home-footer{ max-width:520px; margin-left:auto;margin-
   font-size:11px;letter-spacing:.16em;text-transform:uppercase;
   color:var(--ink-faint);
 }
+.home-foot-dev{
+  margin-top:10px;
+  font-size:11px;letter-spacing:.04em;
+  color:var(--ink-faint);
+}
+.home-foot-dev a{
+  text-decoration:underline;
+  text-underline-offset:3px;
+  color:var(--ink-faint);
+  transition:color .2s var(--ease);
+}
+.home-foot-dev a:hover{color:var(--ink);}
 
 /* ─── Trabalhe Conosco screen ───────────────────────────── */
 .jobs{
