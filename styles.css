@@ -193,9 +193,6 @@ body::before{
   transition:background .2s var(--ease),color .2s var(--ease);
 }
 .header-nav button:hover{background:color-mix(in srgb, var(--hey-black) 8%, transparent);}
-.header-nav button.is-active{
-  background:var(--hey-red);color:var(--hey-cream);
-}
 .header-nav-evento{
   position:relative;
   padding:9px 16px;border-radius:999px;

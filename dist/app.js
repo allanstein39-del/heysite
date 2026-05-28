@@ -193,7 +193,7 @@ function Header({
     className: "",
     onClick: () => navigate("home")
   }, "Home"), /*#__PURE__*/React.createElement("button", {
-    className: screen === "jobs" || screen === "success" ? "is-active" : "",
+    className: "",
     onClick: () => navigate("jobs")
   }, "Trabalhe conosco"), /*#__PURE__*/React.createElement("a", {
     className: "header-nav-evento",
