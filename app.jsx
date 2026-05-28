@@ -30,6 +30,7 @@ function App() {
   // sync data-attrs on <html> so CSS picks up theme
   useAppEffect(() => {
     const r = document.documentElement;
+    r.lang = "pt-BR";
     r.dataset.bg = tweaks.bg;
     r.dataset.btn = tweaks.btn;
     r.dataset.type = tweaks.type;
@@ -55,9 +56,11 @@ function App() {
       <PageLoader/>
       <Header screen={screen} navigate={navigate}/>
 
-      {screen === "home"   && <window.HomeScreen tweaks={tweaks} navigate={navigate}/>}
-      {screen === "jobs"   && <window.JobsScreen navigate={navigate} onSubmit={handleSubmit}/>}
-      {screen === "success"&& <window.SuccessScreen name={submission?.nome} navigate={navigate}/>}
+      <main>
+        {screen === "home"   && <window.HomeScreen tweaks={tweaks} navigate={navigate}/>}
+        {screen === "jobs"   && <window.JobsScreen navigate={navigate} onSubmit={handleSubmit}/>}
+        {screen === "success"&& <window.SuccessScreen name={submission?.nome} navigate={navigate}/>}
+      </main>
 
       <TweaksPanel title="Tweaks">
         <TweakSection label="Cor de fundo"/>
