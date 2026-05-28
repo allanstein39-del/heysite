@@ -1,0 +1,149 @@
+// Hey! Burgers — main app with Tweaks panel
+const { useState: useAppState, useEffect: useAppEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "bg": "red",
+  "btn": "filled",
+  "type": "xxxx",
+  "layout": "centered"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+  const [screen, setScreen] = useAppState("home"); // home | jobs | success
+  const [submission, setSubmission] = useAppState(null);
+
+  // sync data-attrs on <html> so CSS picks up theme
+  useAppEffect(() => {
+    const r = document.documentElement;
+    r.dataset.bg = tweaks.bg;
+    r.dataset.btn = tweaks.btn;
+    r.dataset.type = tweaks.type;
+    r.dataset.layout = tweaks.layout;
+  }, [tweaks]);
+
+  const navigate = (to) => {
+    setScreen(to);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSubmit = (data) => {
+    setSubmission(data);
+    navigate("success");
+  };
+
+  const {
+    TweaksPanel, TweakSection, TweakRadio, TweakButton
+  } = window;
+
+  return (
+    <div className="app">
+      <Header screen={screen} navigate={navigate}/>
+
+      {screen === "home"   && <window.HomeScreen tweaks={tweaks} navigate={navigate}/>}
+      {screen === "jobs"   && <window.JobsScreen navigate={navigate} onSubmit={handleSubmit}/>}
+      {screen === "success"&& <window.SuccessScreen name={submission?.nome} navigate={navigate}/>}
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Cor de fundo"/>
+        <TweakRadio
+          label="bg"
+          value={tweaks.bg}
+          onChange={(v)=>setTweak("bg", v)}
+          options={[
+            { value:"red",   label:"Red" },
+            { value:"black", label:"Black" },
+            { value:"cream", label:"Cream" },
+          ]}
+        />
+
+        <TweakSection label="Botões"/>
+        <TweakRadio
+          label="estilo"
+          value={tweaks.btn}
+          onChange={(v)=>setTweak("btn", v)}
+          options={[
+            { value:"filled",  label:"Filled" },
+            { value:"outline", label:"Outline" },
+            { value:"brutal",  label:"Brutal" },
+          ]}
+        />
+
+        <TweakSection label="Tipografia"/>
+        <TweakRadio
+          label="display"
+          value={tweaks.type}
+          onChange={(v)=>setTweak("type", v)}
+          options={[
+            { value:"regular",   label:"Reg" },
+            { value:"condensed", label:"Cond" },
+            { value:"xxxx",      label:"XXXX" },
+          ]}
+        />
+
+        <TweakSection label="Layout (home)"/>
+        <TweakRadio
+          label="grid"
+          value={tweaks.layout}
+          onChange={(v)=>setTweak("layout", v)}
+          options={[
+            { value:"centered",   label:"Centro" },
+            { value:"asymmetric", label:"Assim" },
+            { value:"grid",       label:"Grid" },
+          ]}
+        />
+
+        <TweakSection label="Navegação"/>
+        <TweakButton label="→ Home" onClick={()=>navigate("home")}/>
+        <TweakButton label="→ Trabalhe Conosco" onClick={()=>navigate("jobs")} secondary/>
+        <TweakButton label="→ Tela de sucesso" onClick={()=>navigate("success")} secondary/>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App/>);
+
+/* ─── Header (logo + nav + social icons) ───────────── */
+function Header({ screen, navigate }){
+  const R = (window.__resources || {});
+  const socials = [
+    { id:"cardapio",  href:"https://pedido.anota.ai/loja/hey-burgers-hamburgueria?f=msa", icon: R.iconCardapio  || "assets/icon-cardapio.png",  label:"Cardápio digital" },
+    { id:"ifood",     href:"https://urlgeni.us/ifood/heyburgersc",                       icon: R.iconIfood     || "assets/icon-ifood.png",     label:"iFood" },
+    { id:"whatsapp",  href:"https://wa.me/5516996294093",                                 icon: R.iconWhats     || "assets/icon-whats.png",     label:"WhatsApp" },
+    { id:"instagram", href:"https://www.instagram.com/heyburgers/",                       icon: R.iconInstagram || "assets/icon-instagram.png", label:"Instagram" },
+  ];
+
+  return (
+    <header className="header">
+      <a className="header-logo" onClick={(e)=>{e.preventDefault();navigate("home");}} href="#">
+        <window.Logo/>
+      </a>
+
+      <nav className="header-nav">
+        <button
+          className={screen==="home" ? "is-active" : ""}
+          onClick={()=>navigate("home")}>Home</button>
+        <button
+          className={screen==="jobs" || screen==="success" ? "is-active" : ""}
+          onClick={()=>navigate("jobs")}>Trabalhe conosco</button>
+      </nav>
+
+      <span className="header-spacer"/>
+
+      <span className="header-hours">
+        <span className="dot"/>Terça a Domingo · 11h às 22h
+      </span>
+
+      <div className="header-socials">
+        {socials.map(s => (
+          <a key={s.id} href={s.href} target="_blank" rel="noopener noreferrer"
+             aria-label={s.label} title={s.label}>
+            <img src={s.icon} alt=""/>
+          </a>
+        ))}
+      </div>
+    </header>
+  );
+}

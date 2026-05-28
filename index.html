@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR" data-bg="red" data-btn="filled" data-type="xxxx" data-layout="centered">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Hey! Burgers — o pedido de todo mundo</title>
+
+  <!-- Resources referenced as strings in JSX — lifted for the standalone bundler -->
+  <meta name="ext-resource-dependency" content="assets/icon-cardapio.png"  data-resource-id="iconCardapio"/>
+  <meta name="ext-resource-dependency" content="assets/icon-ifood.png"     data-resource-id="iconIfood"/>
+  <meta name="ext-resource-dependency" content="assets/icon-whats.png"     data-resource-id="iconWhats"/>
+  <meta name="ext-resource-dependency" content="assets/icon-instagram.png" data-resource-id="iconInstagram"/>
+  <meta name="ext-resource-dependency" content="assets/burger-01.jpg"      data-resource-id="burger1"/>
+  <meta name="ext-resource-dependency" content="assets/burger-02.jpg"      data-resource-id="burger2"/>
+  <meta name="ext-resource-dependency" content="assets/burger-03.jpg"      data-resource-id="burger3"/>
+  <meta name="ext-resource-dependency" content="assets/burger-04.jpg"      data-resource-id="burger4"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <template id="__bundler_thumbnail" data-bg-color="#D71920">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <rect width="200" height="200" fill="#D71920"/>
+      <g fill="#F2E9D6" font-family="Georgia, serif" font-weight="900" font-style="italic" text-anchor="middle">
+        <text x="100" y="108" font-size="58">HEY!</text>
+        <text x="100" y="138" font-size="14" font-style="normal" letter-spacing="4">BURGERS</text>
+      </g>
+    </svg>
+  </template>
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="components.jsx"></script>
+  <script type="text/babel" src="screens.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
