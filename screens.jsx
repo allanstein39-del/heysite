@@ -76,10 +76,17 @@ function HomeScreen({ tweaks, navigate }) {
       </ul>
 
       <footer className="home-footer">
-        <button className="jobs-cta" onClick={() => navigate("jobs")}>
-          Trabalhe conosco
-          <window.Icon.Right/>
-        </button>
+        <div className="home-footer-ctas">
+          <button className="jobs-cta" onClick={() => navigate("jobs")}>
+            Trabalhe conosco
+            <window.Icon.Right/>
+          </button>
+          <a className="jobs-cta jobs-cta--evento" href="https://wa.me/5516996294093?text=Ol%C3%A1%2C+tudo+bem%3F+Gostaria+de+fazer+um+evento+com+a+Hey%21&utm_source=chatgpt.com"
+             target="_blank" rel="noopener noreferrer">
+            Hey! no seu evento
+            <window.Icon.Right/>
+          </a>
+        </div>
         <div className="home-foot-meta">
           Terça a Domingo · delivery only · São Carlos - SP
         </div>

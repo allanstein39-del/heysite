@@ -88,10 +88,17 @@ function HomeScreen({
     className: "link-arrow"
   }, /*#__PURE__*/React.createElement(window.Icon.Arrow, null)))))), /*#__PURE__*/React.createElement("footer", {
     className: "home-footer"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "home-footer-ctas"
   }, /*#__PURE__*/React.createElement("button", {
     className: "jobs-cta",
     onClick: () => navigate("jobs")
-  }, "Trabalhe conosco", /*#__PURE__*/React.createElement(window.Icon.Right, null)), /*#__PURE__*/React.createElement("div", {
+  }, "Trabalhe conosco", /*#__PURE__*/React.createElement(window.Icon.Right, null)), /*#__PURE__*/React.createElement("a", {
+    className: "jobs-cta jobs-cta--evento",
+    href: "https://wa.me/5516996294093?text=Ol%C3%A1%2C+tudo+bem%3F+Gostaria+de+fazer+um+evento+com+a+Hey%21&utm_source=chatgpt.com",
+    target: "_blank",
+    rel: "noopener noreferrer"
+  }, "Hey! no seu evento", /*#__PURE__*/React.createElement(window.Icon.Right, null))), /*#__PURE__*/React.createElement("div", {
     className: "home-foot-meta"
   }, "Ter\xE7a a Domingo \xB7 delivery only \xB7 S\xE3o Carlos - SP"), /*#__PURE__*/React.createElement("div", {
     className: "home-foot-dev"
