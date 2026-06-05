@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#211d18" />
+<title>Recebimento — Cozinha Central</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,900&family=Archivo:wght@400;500;600;700&display=swap');
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+:root{
+  --bg:#f6f1e9; --paper:#fffdf9; --ink:#211d18; --ink2:#6b6157; --line:#e4dccf;
+  --accent:#bc4b26; --accent-d:#9c3c1c; --good:#2f7d4f; --good-bg:#e4f1e8;
+  --warn:#b9821f; --warn-bg:#f7eed6; --bad:#c1392b; --bad-bg:#f7e1de;
+}
+body{font-family:'Archivo',sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;
+  background:radial-gradient(circle at 50% -10%, #fbe9d8 0%, transparent 45%), var(--bg)}
+.wrap{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:12px;padding:18px 18px 14px;border-bottom:1px solid var(--line);
+  background:rgba(255,253,249,.85);backdrop-filter:blur(6px);position:sticky;top:0;z-index:10}
+.logo{width:40px;height:40px;border-radius:11px;background:var(--ink);color:var(--bg);display:grid;place-items:center;
+  font-family:'Fraunces';font-weight:900;font-size:17px;box-shadow:3px 3px 0 var(--accent);flex-shrink:0}
+.top h1{font-family:'Fraunces';font-weight:600;font-size:18px;margin:0;letter-spacing:-.3px}
+.top p{margin:1px 0 0;font-size:11.5px;color:var(--ink2)}
+.scroll{flex:1;padding:18px 16px 30px;display:flex;flex-direction:column;gap:18px}
+.lbl{font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:7px}
+.dt{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink2);margin-bottom:2px}
+input[type=text]{font-family:'Archivo';font-size:16px;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;
+  background:var(--paper);color:var(--ink);width:100%}
+input[type=text]:focus{outline:none;border-color:var(--accent)}
+.occ{display:flex;gap:8px}
+.occ button{flex:1;font-family:'Archivo';font-weight:600;font-size:14px;padding:13px 4px;border-radius:12px;cursor:pointer;
+  border:1.5px solid var(--line);background:var(--paper);color:var(--ink2);transition:.12s}
+.occ button .ic{display:block;font-size:19px;margin-bottom:3px}
+.occ button.on.ok{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.occ button.on.faltou{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.occ button.on.avaria{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.photo-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  border:1.5px dashed var(--line);border-radius:14px;background:var(--paper);color:var(--ink2);
+  padding:24px;font-family:'Archivo';font-weight:600;font-size:14px;cursor:pointer;width:100%}
+.photo-btn .ic{font-size:30px}
+.photo-prev{position:relative;border-radius:14px;overflow:hidden;border:1.5px solid var(--line)}
+.photo-prev img{width:100%;display:block}
+.photo-prev .rm{position:absolute;top:8px;right:8px;background:rgba(33,29,24,.8);color:#fff;border:none;
+  width:34px;height:34px;border-radius:50%;font-size:18px;cursor:pointer}
+.sig-wrap{border:1.5px dashed var(--line);border-radius:14px;background:var(--paper);overflow:hidden;position:relative}
+.sig-wrap.signed{border-style:solid}
+canvas{display:block;width:100%;height:150px;touch-action:none}
+.sig-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink2);
+  font-size:13px;pointer-events:none;opacity:.6}
+.sig-clear{position:absolute;bottom:8px;right:10px;background:none;border:none;color:var(--accent);font-family:'Archivo';
+  font-weight:600;font-size:12.5px;cursor:pointer}
+.confirm{background:var(--ink);color:var(--bg);border:none;font-family:'Archivo';font-weight:700;font-size:16px;
+  padding:16px;border-radius:13px;cursor:pointer;box-shadow:4px 4px 0 var(--accent);width:100%}
+.confirm:disabled{opacity:.4;box-shadow:none;cursor:not-allowed}
+.hist-head{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.hist-head h2{font-family:'Fraunces';font-weight:600;font-size:16px;margin:0}
+.rec{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:12px 13px;display:flex;gap:11px;align-items:center}
+.rec .thumb{width:46px;height:46px;border-radius:9px;object-fit:cover;background:var(--line);flex-shrink:0}
+.rec .info{flex:1;min-width:0}
+.rec .info b{font-size:14px;display:block}
+.rec .info span{font-size:12px;color:var(--ink2)}
+.pill{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;padding:2px 7px;border-radius:6px}
+.pill.ok{background:var(--good-bg);color:var(--good)} .pill.faltou{background:var(--warn-bg);color:var(--warn)}
+.pill.avaria{background:var(--bad-bg);color:var(--bad)}
+.empty{text-align:center;color:var(--ink2);font-size:13px;font-style:italic;padding:18px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--bg);
+  padding:13px 20px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;transition:.3s;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.tabs{display:flex;gap:4px;padding:10px 12px 0;background:rgba(255,253,249,.85);position:sticky;top:72px;z-index:9}
+.tabbtn{flex:1;text-align:center;font-family:'Archivo';font-weight:600;font-size:12.5px;padding:10px 4px;border-radius:11px 11px 0 0;
+  border:none;background:none;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent}
+.tabbtn.on{color:var(--accent-d);border-bottom-color:var(--accent)}
+.screen{display:none}
+.screen.on{display:flex;flex-direction:column;gap:18px}
+select{font-family:'Archivo';font-size:16px;padding:12px 13px;border:1.5px solid var(--line);border-radius:11px;background:var(--paper);color:var(--ink);width:100%}
+select:focus{outline:none;border-color:var(--accent)}
+.forn-row{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.forn-row .fn{flex:1;font-size:15px;font-weight:500}
+.forn-row .del{background:none;border:none;color:var(--bad);font-size:18px;cursor:pointer}
+.addforn{display:flex;gap:8px}
+.addforn input{flex:1}
+.addforn button{background:var(--ink);color:var(--bg);border:none;border-radius:11px;padding:0 16px;font-family:'Archivo';font-weight:700;font-size:14px;cursor:pointer}
+.filtros{display:flex;gap:8px}
+.filtros select,.filtros input{flex:1}
+.grec{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:12px 13px;display:flex;gap:11px;align-items:flex-start}
+.grec .thumb{width:54px;height:54px;border-radius:9px;object-fit:cover;background:var(--line);flex-shrink:0;cursor:pointer}
+.grec .gi{flex:1;min-width:0}
+.grec .gi b{font-size:14.5px;display:block}
+.grec .gi .meta{font-size:12px;color:var(--ink2);margin-top:2px;line-height:1.5}
+.grec .gi .val{font-weight:700;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="logo">FT</div>
+    <div><h1>Recebimento</h1><p>Cozinha Central</p></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tabbtn on" id="tabReceber" onclick="setTab('receber')">Receber</button>
+    <button class="tabbtn" id="tabFornecedores" onclick="setTab('fornecedores')">Fornecedores</button>
+    <button class="tabbtn" id="tabGestor" onclick="setTab('gestor')">Gestor</button>
+  </div>
+
+  <div class="scroll">
+   <div class="screen on" id="scrReceber">
+    <div class="dt"><span id="datahora">—</span> · registrado automaticamente</div>
+
+    <div>
+      <label class="lbl">Fornecedor</label>
+      <select id="fornecedorSel"></select>
+      <input type="text" id="fornecedorAvulso" placeholder="digite o nome do fornecedor" autocomplete="off" style="display:none;margin-top:8px" />
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <div style="flex:1.4"><label class="lbl">Nota (nº)</label><input type="text" id="nota" placeholder="ex: 12345" autocomplete="off" inputmode="numeric" /></div>
+      <div style="flex:1"><label class="lbl">Valor (R$)</label><input type="text" id="valor" placeholder="0,00" autocomplete="off" inputmode="decimal" /></div>
+    </div>
+
+    <div>
+      <label class="lbl">Como chegou?</label>
+      <div class="occ" id="occ">
+        <button data-v="ok" class="on ok"><span class="ic">✓</span>Tudo ok</button>
+        <button data-v="faltou"><span class="ic">▽</span>Faltou</button>
+        <button data-v="avaria"><span class="ic">⚠</span>Avaria</button>
+      </div>
+    </div>
+
+    <div>
+      <label class="lbl">Observação (opcional)</label>
+      <input type="text" id="obs" placeholder="ex: faltou 2 kg de bacon" autocomplete="off" />
+    </div>
+
+    <div>
+      <label class="lbl">Foto da nota / mercadoria</label>
+      <button class="photo-btn" id="photoBtn"><span class="ic">📷</span>Tirar / escolher foto</button>
+      <div class="photo-prev" id="photoPrev" style="display:none"><img id="photoImg" alt="foto"/><button class="rm" id="photoRm">×</button></div>
+      <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" />
+    </div>
+
+    <div>
+      <label class="lbl">Nome de quem recebeu</label>
+      <input type="text" id="receptor" placeholder="ex: João da cozinha" autocomplete="off" />
+    </div>
+
+    <div>
+      <label class="lbl">Assinatura de quem recebeu</label>
+      <div class="sig-wrap" id="sigWrap">
+        <canvas id="sig"></canvas>
+        <div class="sig-hint" id="sigHint">assine aqui com o dedo</div>
+        <button class="sig-clear" id="sigClear">limpar</button>
+      </div>
+    </div>
+
+    <button class="confirm" id="confirm">Confirmar recebimento</button>
+
+    <div class="hist-head">
+      <h2>Recebimentos de hoje</h2>
+    </div>
+    <div id="hist"></div>
+   </div><!-- /scrReceber -->
+
+   <div class="screen" id="scrFornecedores">
+    <div><h2 style="font-family:'Fraunces';font-weight:600;font-size:17px;margin:0 0 4px">Fornecedores</h2>
+    <p style="font-size:12.5px;color:var(--ink2);margin:0 0 4px">A lista que aparece no recebimento. Cadastre aqui; quem recebe só seleciona.</p></div>
+    <div class="addforn">
+      <input type="text" id="novoForn" placeholder="nome do fornecedor" autocomplete="off" />
+      <button id="addFornBtn">Add</button>
+    </div>
+    <div id="fornList"></div>
+   </div><!-- /scrFornecedores -->
+
+   <div class="screen" id="scrGestor">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px">
+      <div><h2 style="font-family:'Fraunces';font-weight:600;font-size:17px;margin:0 0 4px">Recebimentos</h2>
+      <p style="font-size:12.5px;color:var(--ink2);margin:0">Visão do gestor — tudo que foi recebido.</p></div>
+      <button id="imprimirGestor" style="background:none;border:1.5px solid var(--line);border-radius:9px;font-family:'Archivo';font-weight:600;font-size:12.5px;padding:8px 11px;cursor:pointer;color:var(--ink);white-space:nowrap">Ver / imprimir</button>
+    </div>
+    <div class="filtros">
+      <select id="fGestorForn"><option value="">Todos fornecedores</option></select>
+      <input type="date" id="fGestorData" />
+    </div>
+    <div id="gestorList"></div>
+   </div><!-- /scrGestor -->
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+var _URL = 'https://mjavmzncautleiohscod.supabase.co';
+var _KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1qYXZtem5jYXV0bGVpb2hzY29kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NjM0MDYsImV4cCI6MjA5NjIzOTQwNn0.pbLHMUxmotVtiiQV0MZ8Fa13K97-sFqlkzRjOsXsgqU';
+var sb = supabase.createClient(_URL, _KEY);
+
+var occ = "ok", photoData = null, hasSig = false;
+var _fornecedores = [];
+
+// ---- UTILS ----
+function fmtDateTime(d) {
+  var dd = String(d.getDate()).padStart(2,"0"), mm = String(d.getMonth()+1).padStart(2,"0");
+  var hh = String(d.getHours()).padStart(2,"0"), mi = String(d.getMinutes()).padStart(2,"0");
+  return dd+"/"+mm+" · "+hh+":"+mi;
+}
+function tick() { document.getElementById("datahora").textContent = fmtDateTime(new Date()); }
+tick(); setInterval(tick, 10000);
+
+function toast(msg) {
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.className = "toast show";
+  setTimeout(function(){ t.className = "toast"; }, 2500);
+}
+
+// ---- TABS ----
+function setTab(t) {
+  ["receber","fornecedores","gestor"].forEach(function(x){
+    document.getElementById("scr"+x.charAt(0).toUpperCase()+x.slice(1)).className = "screen"+(x===t?" on":"");
+    document.getElementById("tab"+x.charAt(0).toUpperCase()+x.slice(1)).className = "tabbtn"+(x===t?" on":"");
+  });
+  if(t==="fornecedores") renderForn();
+  if(t==="gestor"){ popularFiltroForn(); renderGestor(); }
+  if(t==="receber") popularSelectForn();
+  window.scrollTo(0,0);
+}
+
+// ---- OCORRÊNCIA ----
+var occBtns = document.querySelectorAll("#occ button");
+occBtns.forEach(function(b){
+  b.addEventListener("click", function(){
+    occBtns.forEach(function(x){ x.className=""; });
+    occ = b.getAttribute("data-v");
+    b.className = "on "+occ;
+  });
+});
+
+// ---- FOTO ----
+var photoInput = document.getElementById("photoInput");
+document.getElementById("photoBtn").addEventListener("click", function(){ photoInput.click(); });
+photoInput.addEventListener("change", function(e){
+  var f = e.target.files[0]; if(!f) return;
+  var reader = new FileReader();
+  reader.onload = function(){
+    var img = new Image();
+    img.onload = function(){
+      var max=1000, w=img.width, h=img.height;
+      if(w>max||h>max){ if(w>h){h=h*max/w;w=max;}else{w=w*max/h;h=max;} }
+      var cv2=document.createElement("canvas"); cv2.width=w; cv2.height=h;
+      cv2.getContext("2d").drawImage(img,0,0,w,h);
+      photoData = cv2.toDataURL("image/jpeg",0.7);
+      document.getElementById("photoImg").src = photoData;
+      document.getElementById("photoPrev").style.display = "block";
+      document.getElementById("photoBtn").style.display = "none";
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(f);
+});
+document.getElementById("photoRm").addEventListener("click", function(){
+  photoData = null; photoInput.value = "";
+  document.getElementById("photoPrev").style.display = "none";
+  document.getElementById("photoBtn").style.display = "flex";
+});
+
+// ---- ASSINATURA ----
+var cv = document.getElementById("sig"), ctx = cv.getContext("2d"), drawing = false;
+function sizeCanvas(){
+  var r = cv.getBoundingClientRect();
+  cv.width = r.width*2; cv.height = r.height*2; ctx.scale(2,2);
+  ctx.lineWidth = 2.2; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.strokeStyle = "#211d18";
+}
+sizeCanvas(); window.addEventListener("resize", sizeCanvas);
+function pos(e){ var r=cv.getBoundingClientRect(); var t=e.touches?e.touches[0]:e; return {x:t.clientX-r.left,y:t.clientY-r.top}; }
+function start(e){ e.preventDefault(); drawing=true; var p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); }
+function move(e){ if(!drawing)return; e.preventDefault(); var p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke();
+  if(!hasSig){hasSig=true;document.getElementById("sigHint").style.display="none";document.getElementById("sigWrap").className="sig-wrap signed";} }
+function end(){ drawing=false; }
+cv.addEventListener("mousedown",start); cv.addEventListener("mousemove",move); window.addEventListener("mouseup",end);
+cv.addEventListener("touchstart",start,{passive:false}); cv.addEventListener("touchmove",move,{passive:false}); cv.addEventListener("touchend",end);
+document.getElementById("sigClear").addEventListener("click", function(){
+  ctx.clearRect(0,0,cv.width,cv.height); hasSig=false;
+  document.getElementById("sigHint").style.display="flex"; document.getElementById("sigWrap").className="sig-wrap";
+});
+
+// ---- SUPABASE: FORNECEDORES ----
+var SEEDS = ["Frigorífico Boi Bom","Hortifruti Sol","Laticínios Vale","Padaria Central","Atacadão"];
+
+async function loadFornDB() {
+  var r = await sb.from('fornecedores').select('id,nome').order('nome');
+  if(r.error){ console.error(r.error); return []; }
+  if(!r.data.length) {
+    await sb.from('fornecedores').insert(SEEDS.map(function(n){ return {nome:n}; }));
+    var r2 = await sb.from('fornecedores').select('id,nome').order('nome');
+    r.data = r2.data || [];
+  }
+  _fornecedores = r.data;
+  return r.data;
+}
+
+async function addFornDB(nome) {
+  var exists = _fornecedores.find(function(f){ return f.nome.toLowerCase()===nome.toLowerCase(); });
+  if(exists) return exists;
+  var r = await sb.from('fornecedores').insert({nome:nome}).select('id,nome').single();
+  if(r.error) throw r.error;
+  _fornecedores.push(r.data);
+  return r.data;
+}
+
+async function deleteFornDB(id) {
+  var r = await sb.from('fornecedores').delete().eq('id',id);
+  if(r.error) throw r.error;
+  _fornecedores = _fornecedores.filter(function(f){ return f.id!==id; });
+}
+
+// ---- SUPABASE: FOTO UPLOAD ----
+async function uploadFoto(dataUrl) {
+  var res = await fetch(dataUrl);
+  var blob = await res.blob();
+  var path = 'fotos/'+Date.now()+'.jpg';
+  var r = await sb.storage.from('recebimentos-fotos').upload(path, blob, {contentType:'image/jpeg'});
+  if(r.error) throw r.error;
+  var pub = sb.storage.from('recebimentos-fotos').getPublicUrl(path);
+  return pub.data.publicUrl;
+}
+
+// ---- SUPABASE: RECEBIMENTOS ----
+async function saveRecebimentoDB(rec) {
+  var r = await sb.from('recebimentos').insert(rec).select().single();
+  if(r.error) throw r.error;
+  return r.data;
+}
+
+async function loadRecebimentosDB(filtros) {
+  filtros = filtros || {};
+  var q = sb.from('recebimentos').select('*').order('criado_em',{ascending:false});
+  if(filtros.fornecedor_id) q = q.eq('fornecedor_id', filtros.fornecedor_id);
+  if(filtros.data) {
+    // convert local date to UTC range
+    var s = new Date(filtros.data+'T00:00:00');
+    var e = new Date(filtros.data+'T23:59:59');
+    q = q.gte('criado_em', s.toISOString()).lte('criado_em', e.toISOString());
+  }
+  var r = await q;
+  if(r.error){ console.error(r.error); return []; }
+  return r.data;
+}
+
+// ---- RENDER: SELECT FORNECEDOR ----
+function popularSelectForn() {
+  var sel = document.getElementById("fornecedorSel"); if(!sel) return;
+  sel.innerHTML = '<option value="">— selecione —</option>'+
+    _fornecedores.map(function(f){ return '<option value="'+f.id+'">'+f.nome+'</option>'; }).join("")+
+    '<option value="__avulso__">+ outro (digitar)</option>';
+}
+
+// ---- RENDER: TELA FORNECEDORES ----
+function renderForn() {
+  var el = document.getElementById("fornList");
+  if(!_fornecedores.length){ el.innerHTML='<div class="empty">Nenhum fornecedor cadastrado.</div>'; return; }
+  el.innerHTML = _fornecedores.slice().sort(function(a,b){ return a.nome.localeCompare(b.nome,"pt"); }).map(function(f){
+    return '<div class="forn-row"><span class="fn">'+f.nome+'</span><button class="del" data-id="'+f.id+'">×</button></div>';
+  }).join("");
+  el.querySelectorAll("[data-id]").forEach(function(b){
+    b.addEventListener("click", async function(){
+      var id = b.getAttribute("data-id");
+      var f = _fornecedores.find(function(x){ return x.id===id; });
+      if(!f||!confirm('Remover "'+f.nome+'" da lista?')) return;
+      try{ await deleteFornDB(id); renderForn(); toast("Removido"); }
+      catch(e){ toast("Erro ao remover"); console.error(e); }
+    });
+  });
+}
+
+// ---- RENDER: FILTRO GESTOR ----
+function popularFiltroForn() {
+  var sel = document.getElementById("fGestorForn"); if(!sel) return;
+  var cur = sel.value;
+  sel.innerHTML = '<option value="">Todos fornecedores</option>'+
+    _fornecedores.map(function(f){ return '<option value="'+f.id+'"'+(f.id===cur?' selected':'')+'>'+f.nome+'</option>'; }).join("");
+}
+
+// ---- RENDER: TELA GESTOR ----
+async function renderGestor() {
+  var el = document.getElementById("gestorList");
+  el.innerHTML = '<div class="empty">Carregando…</div>';
+  var ff = document.getElementById("fGestorForn").value;
+  var fd = document.getElementById("fGestorData").value;
+  var filtros = {};
+  if(ff) filtros.fornecedor_id = ff;
+  if(fd) filtros.data = fd;
+  var arr = await loadRecebimentosDB(filtros);
+  if(!arr.length){ el.innerHTML='<div class="empty">Nenhum recebimento'+(ff||fd?" com esse filtro":"")+'.</div>'; return; }
+  el.innerHTML = arr.map(function(r){
+    var d = new Date(r.criado_em);
+    var quando = fmtDateTime(d);
+    var lbl = r.ocorrencia==="ok"?"Tudo ok":(r.ocorrencia==="faltou"?"Faltou":"Avaria");
+    var thumb = r.foto_url
+      ? '<img class="thumb" src="'+r.foto_url+'" data-url="'+r.foto_url+'"/>'
+      : '<div class="thumb"></div>';
+    return '<div class="grec">'+thumb+'<div class="gi"><b>'+(r.fornecedor_nome||"(sem fornecedor)")+'</b>'+
+      '<div class="meta">'+quando+(r.nota?" · NF "+r.nota:"")+(r.valor?' · <span class="val">R$ '+r.valor+'</span>':"")+
+      '<br><span class="pill '+r.ocorrencia+'">'+lbl+'</span>'+
+      (r.recebido_por?" · recebeu: "+r.recebido_por:"")+(r.observacao?"<br>"+r.observacao:"")+'</div></div></div>';
+  }).join("");
+  el.querySelectorAll("[data-url]").forEach(function(img){
+    img.addEventListener("click", function(){
+      var w = window.open(""); w.document.write('<img src="'+img.getAttribute("data-url")+'" style="max-width:100%">');
+    });
+  });
+}
+
+// ---- RENDER: RECEBIMENTOS DE HOJE ----
+async function render() {
+  var h = document.getElementById("hist");
+  var hoje = new Date().toISOString().slice(0,10);
+  var arr = await loadRecebimentosDB({data: hoje});
+  if(!arr.length){ h.innerHTML='<div class="empty">Nenhum recebimento hoje.</div>'; return; }
+  h.innerHTML = arr.map(function(r){
+    var lbl = r.ocorrencia==="ok"?"Tudo ok":(r.ocorrencia==="faltou"?"Faltou":"Avaria");
+    var thumb = r.foto_url
+      ? '<img class="thumb" src="'+r.foto_url+'"/>'
+      : '<div class="thumb"></div>';
+    return '<div class="rec">'+thumb+'<div class="info"><b>'+(r.fornecedor_nome||"(sem fornecedor)")+'</b>'+
+      '<span>'+fmtDateTime(new Date(r.criado_em))+(r.recebido_por?" · "+r.recebido_por:"")+(r.observacao?" · "+r.observacao:"")+'</span></div>'+
+      '<span class="pill '+r.ocorrencia+'">'+lbl+'</span></div>';
+  }).join("");
+}
+
+// ---- IMPRIMIR ----
+async function imprimirGestor() {
+  var ff = document.getElementById("fGestorForn").value;
+  var fd = document.getElementById("fGestorData").value;
+  var filtros = {};
+  if(ff) filtros.fornecedor_id = ff;
+  if(fd) filtros.data = fd;
+  var arr = await loadRecebimentosDB(filtros);
+  if(!arr.length){ toast("Nada para imprimir"); return; }
+  var total = 0;
+  var fNome = ff ? ((_fornecedores.find(function(f){ return f.id===ff; }))||{}).nome||"" : "";
+  var rows = arr.map(function(r){
+    var v = parseFloat(String(r.valor||"").replace(/\./g,"").replace(",","."))||0; total+=v;
+    var lbl = r.ocorrencia==="ok"?"Tudo ok":(r.ocorrencia==="faltou"?"Faltou":"Avaria");
+    var quando = fmtDateTime(new Date(r.criado_em));
+    return '<tr><td style="padding:7px 10px;border-bottom:1px solid #eee">'+quando+'</td>'+
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+(r.fornecedor_nome||"—")+'</td>'+
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+(r.nota||"—")+'</td>'+
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right">'+(r.valor?"R$ "+r.valor:"—")+'</td>'+
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+lbl+'</td>'+
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+(r.recebido_por||"—")+'</td></tr>';
+  }).join("");
+  var titulo = "Recebimentos"+(fNome?" — "+fNome:"")+(fd?" — "+fd.split("-").reverse().join("/"):"");
+  var w = window.open("","_blank");
+  w.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>'+titulo+'</title>'+
+    '<style>body{font-family:Arial,sans-serif;color:#211d18;max-width:720px;margin:24px auto;padding:0 16px}'+
+    'h1{font-size:22px;margin:0 0 2px}.sub{color:#666;font-size:13px;margin-bottom:18px;border-bottom:2px solid #211d18;padding-bottom:8px}'+
+    'table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;padding:7px 10px;border-bottom:2px solid #211d18;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:#555}'+
+    '.tot{margin-top:14px;text-align:right;font-size:15px;font-weight:700}@media print{button{display:none}}'+
+    'button{background:#211d18;color:#fff;border:none;padding:10px 16px;border-radius:8px;font-size:14px;cursor:pointer;margin-bottom:16px}</style></head><body>'+
+    '<button onclick="window.print()">Imprimir / Salvar PDF</button>'+
+    '<h1>Recebimentos de mercadoria</h1><div class="sub">'+titulo+' · '+arr.length+' registro(s)</div>'+
+    '<table><thead><tr><th>Data</th><th>Fornecedor</th><th>Nota</th><th>Valor</th><th>Ocorrência</th><th>Recebeu</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<div class="tot">Total: R$ '+total.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})+'</div></body></html>');
+  w.document.close();
+}
+
+// ---- CONFIRMAR RECEBIMENTO ----
+document.getElementById("confirm").addEventListener("click", async function(){
+  var btn = this;
+  btn.disabled = true;
+  btn.textContent = "Salvando…";
+  try {
+    var sel = document.getElementById("fornecedorSel").value;
+    var avulsoNome = document.getElementById("fornecedorAvulso").value.trim();
+    var fornecedor_id = null, fornecedor_nome = "";
+
+    if(sel === "__avulso__") {
+      if(!avulsoNome){ toast("Digite o nome do fornecedor"); return; }
+      var f = await addFornDB(avulsoNome);
+      fornecedor_id = f.id; fornecedor_nome = f.nome;
+      popularSelectForn();
+    } else if(sel) {
+      var f2 = _fornecedores.find(function(x){ return x.id===sel; });
+      fornecedor_id = sel; fornecedor_nome = f2 ? f2.nome : "";
+    } else {
+      toast("Selecione ou informe o fornecedor"); return;
+    }
+
+    var foto_url = null;
+    if(photoData) {
+      try{ foto_url = await uploadFoto(photoData); }
+      catch(e){ console.error("Erro ao enviar foto:",e); toast("Foto não enviada — continuando sem foto"); }
+    }
+
+    var assinatura = hasSig ? cv.toDataURL("image/png") : null;
+
+    await saveRecebimentoDB({
+      fornecedor_id: fornecedor_id,
+      fornecedor_nome: fornecedor_nome,
+      nota: document.getElementById("nota").value.trim()||null,
+      valor: document.getElementById("valor").value.trim()||null,
+      ocorrencia: occ,
+      observacao: document.getElementById("obs").value.trim()||null,
+      foto_url: foto_url,
+      recebido_por: document.getElementById("receptor").value.trim()||null,
+      assinatura: assinatura
+    });
+
+    // reset form
+    document.getElementById("fornecedorAvulso").value="";
+    document.getElementById("fornecedorAvulso").style.display="none";
+    document.getElementById("nota").value="";
+    document.getElementById("valor").value="";
+    document.getElementById("obs").value="";
+    document.getElementById("receptor").value="";
+    occBtns.forEach(function(x){x.className="";}); occBtns[0].className="on ok"; occ="ok";
+    document.getElementById("photoRm").click();
+    document.getElementById("sigClear").click();
+    popularSelectForn();
+    toast("Recebimento registrado ✓");
+    await render();
+    window.scrollTo({top:0,behavior:"smooth"});
+  } catch(e) {
+    console.error(e);
+    toast("Erro ao salvar. Verifique a conexão.");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Confirmar recebimento";
+  }
+});
+
+// select fornecedor: alterna campo avulso
+document.getElementById("fornecedorSel").addEventListener("change", function(){
+  var av = document.getElementById("fornecedorAvulso");
+  av.style.display = this.value==="__avulso__"?"block":"none";
+  if(this.value==="__avulso__") av.focus();
+});
+
+// add fornecedor (tela Fornecedores)
+document.getElementById("addFornBtn").addEventListener("click", async function(){
+  var inp = document.getElementById("novoForn");
+  var nome = inp.value.trim();
+  if(!nome){ toast("Digite o nome"); return; }
+  try {
+    await addFornDB(nome);
+    inp.value=""; renderForn(); toast("Fornecedor adicionado");
+  } catch(e){ toast("Erro ao adicionar"); console.error(e); }
+});
+document.getElementById("novoForn").addEventListener("keydown", function(e){ if(e.key==="Enter") document.getElementById("addFornBtn").click(); });
+
+// filtros gestor
+document.getElementById("fGestorForn").addEventListener("change", renderGestor);
+document.getElementById("fGestorData").addEventListener("change", renderGestor);
+document.getElementById("imprimirGestor").addEventListener("click", imprimirGestor);
+
+// ---- INIT ----
+(async function init(){
+  await loadFornDB();
+  popularSelectForn();
+  await render();
+})();
+</script>
+</body>
+</html>
