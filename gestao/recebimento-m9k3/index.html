@@ -90,13 +90,45 @@ select:focus{outline:none;border-color:var(--accent)}
 .grec .gi b{font-size:14.5px;display:block}
 .grec .gi .meta{font-size:12px;color:var(--ink2);margin-top:2px;line-height:1.5}
 .grec .gi .val{font-weight:700;color:var(--ink)}
+
+.gate{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  background:var(--bg);padding:24px}
+.gate-card{max-width:340px;width:100%;background:var(--paper);border:1px solid var(--line);
+  border-radius:16px;padding:26px 22px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.gate-card .logo{margin-bottom:14px}
+.gate-card h1{font-family:'Fraunces';font-weight:600;font-size:19px;margin:0 0 4px}
+.gate-card p{font-size:12.5px;color:var(--ink2);margin:0 0 18px}
+.gate-card label{font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;
+  letter-spacing:.4px;display:block;margin:0 0 6px}
+.gate-card input{margin-bottom:14px}
+.gate-err{font-size:12.5px;color:var(--bad);margin:-6px 0 12px;display:none}
+.logout{background:none;border:none;color:var(--ink2);font-family:'Archivo';font-size:12px;
+  font-weight:600;cursor:pointer;text-decoration:underline;margin-left:auto}
 </style>
 </head>
 <body>
-<div class="wrap">
+
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="logo">FT</div>
+    <h1>Recebimento</h1>
+    <p>Área restrita da equipe — entre com o login da cozinha para continuar.</p>
+    <form id="loginForm">
+      <label>E-mail</label>
+      <input type="email" id="loginEmail" autocomplete="username" required />
+      <label>Senha</label>
+      <input type="password" id="loginPassword" autocomplete="current-password" required />
+      <div class="gate-err" id="gateErr">E-mail ou senha inválidos.</div>
+      <button type="submit" class="confirm" id="loginBtn">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none">
   <div class="top">
     <div class="logo">FT</div>
     <div><h1>Recebimento</h1><p>Cozinha Central</p></div>
+    <button class="logout" id="logoutBtn">sair</button>
   </div>
 
   <div class="tabs">
@@ -197,8 +229,20 @@ var sb = supabase.createClient(_URL, _KEY);
 
 var occ = "ok", photoData = null, hasSig = false;
 var _fornecedores = [];
+var _booted = false;
 
 // ---- UTILS ----
+// Escapes user-supplied strings before they're dropped into innerHTML.
+// Every field below (fornecedor, nota, valor, observação, quem recebeu,
+// foto_url) can be written directly through the Supabase REST API by
+// anyone with the anon/auth key, not just through this form — so treat
+// all of it as untrusted, even after login is required.
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"']/g, function(c) {
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+
 function fmtDateTime(d) {
   var dd = String(d.getDate()).padStart(2,"0"), mm = String(d.getMonth()+1).padStart(2,"0");
   var hh = String(d.getHours()).padStart(2,"0"), mi = String(d.getMinutes()).padStart(2,"0");
@@ -350,7 +394,7 @@ async function loadRecebimentosDB(filtros) {
 function popularSelectForn() {
   var sel = document.getElementById("fornecedorSel"); if(!sel) return;
   sel.innerHTML = '<option value="">— selecione —</option>'+
-    _fornecedores.map(function(f){ return '<option value="'+f.id+'">'+f.nome+'</option>'; }).join("")+
+    _fornecedores.map(function(f){ return '<option value="'+esc(f.id)+'">'+esc(f.nome)+'</option>'; }).join("")+
     '<option value="__avulso__">+ outro (digitar)</option>';
 }
 
@@ -359,7 +403,7 @@ function renderForn() {
   var el = document.getElementById("fornList");
   if(!_fornecedores.length){ el.innerHTML='<div class="empty">Nenhum fornecedor cadastrado.</div>'; return; }
   el.innerHTML = _fornecedores.slice().sort(function(a,b){ return a.nome.localeCompare(b.nome,"pt"); }).map(function(f){
-    return '<div class="forn-row"><span class="fn">'+f.nome+'</span><button class="del" data-id="'+f.id+'">×</button></div>';
+    return '<div class="forn-row"><span class="fn">'+esc(f.nome)+'</span><button class="del" data-id="'+esc(f.id)+'">×</button></div>';
   }).join("");
   el.querySelectorAll("[data-id]").forEach(function(b){
     b.addEventListener("click", async function(){
@@ -377,7 +421,7 @@ function popularFiltroForn() {
   var sel = document.getElementById("fGestorForn"); if(!sel) return;
   var cur = sel.value;
   sel.innerHTML = '<option value="">Todos fornecedores</option>'+
-    _fornecedores.map(function(f){ return '<option value="'+f.id+'"'+(f.id===cur?' selected':'')+'>'+f.nome+'</option>'; }).join("");
+    _fornecedores.map(function(f){ return '<option value="'+esc(f.id)+'"'+(f.id===cur?' selected':'')+'>'+esc(f.nome)+'</option>'; }).join("");
 }
 
 // ---- RENDER: TELA GESTOR ----
@@ -396,16 +440,16 @@ async function renderGestor() {
     var quando = fmtDateTime(d);
     var lbl = r.ocorrencia==="ok"?"Tudo ok":(r.ocorrencia==="faltou"?"Faltou":"Avaria");
     var thumb = r.foto_url
-      ? '<img class="thumb" src="'+r.foto_url+'" data-url="'+r.foto_url+'"/>'
+      ? '<img class="thumb" src="'+esc(r.foto_url)+'" data-url="'+esc(r.foto_url)+'"/>'
       : '<div class="thumb"></div>';
-    return '<div class="grec">'+thumb+'<div class="gi"><b>'+(r.fornecedor_nome||"(sem fornecedor)")+'</b>'+
-      '<div class="meta">'+quando+(r.nota?" · NF "+r.nota:"")+(r.valor?' · <span class="val">R$ '+r.valor+'</span>':"")+
+    return '<div class="grec">'+thumb+'<div class="gi"><b>'+esc(r.fornecedor_nome||"(sem fornecedor)")+'</b>'+
+      '<div class="meta">'+quando+(r.nota?" · NF "+esc(r.nota):"")+(r.valor?' · <span class="val">R$ '+esc(r.valor)+'</span>':"")+
       '<br><span class="pill '+r.ocorrencia+'">'+lbl+'</span>'+
-      (r.recebido_por?" · recebeu: "+r.recebido_por:"")+(r.observacao?"<br>"+r.observacao:"")+'</div></div></div>';
+      (r.recebido_por?" · recebeu: "+esc(r.recebido_por):"")+(r.observacao?"<br>"+esc(r.observacao):"")+'</div></div></div>';
   }).join("");
   el.querySelectorAll("[data-url]").forEach(function(img){
     img.addEventListener("click", function(){
-      var w = window.open(""); w.document.write('<img src="'+img.getAttribute("data-url")+'" style="max-width:100%">');
+      var w = window.open(""); w.document.write('<img src="'+esc(img.getAttribute("data-url"))+'" style="max-width:100%">');
     });
   });
 }
@@ -419,10 +463,10 @@ async function render() {
   h.innerHTML = arr.map(function(r){
     var lbl = r.ocorrencia==="ok"?"Tudo ok":(r.ocorrencia==="faltou"?"Faltou":"Avaria");
     var thumb = r.foto_url
-      ? '<img class="thumb" src="'+r.foto_url+'"/>'
+      ? '<img class="thumb" src="'+esc(r.foto_url)+'"/>'
       : '<div class="thumb"></div>';
-    return '<div class="rec">'+thumb+'<div class="info"><b>'+(r.fornecedor_nome||"(sem fornecedor)")+'</b>'+
-      '<span>'+fmtDateTime(new Date(r.criado_em))+(r.recebido_por?" · "+r.recebido_por:"")+(r.observacao?" · "+r.observacao:"")+'</span></div>'+
+    return '<div class="rec">'+thumb+'<div class="info"><b>'+esc(r.fornecedor_nome||"(sem fornecedor)")+'</b>'+
+      '<span>'+fmtDateTime(new Date(r.criado_em))+(r.recebido_por?" · "+esc(r.recebido_por):"")+(r.observacao?" · "+esc(r.observacao):"")+'</span></div>'+
       '<span class="pill '+r.ocorrencia+'">'+lbl+'</span></div>';
   }).join("");
 }
@@ -443,13 +487,13 @@ async function imprimirGestor() {
     var lbl = r.ocorrencia==="ok"?"Tudo ok":(r.ocorrencia==="faltou"?"Faltou":"Avaria");
     var quando = fmtDateTime(new Date(r.criado_em));
     return '<tr><td style="padding:7px 10px;border-bottom:1px solid #eee">'+quando+'</td>'+
-      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+(r.fornecedor_nome||"—")+'</td>'+
-      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+(r.nota||"—")+'</td>'+
-      '<td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right">'+(r.valor?"R$ "+r.valor:"—")+'</td>'+
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+esc(r.fornecedor_nome||"—")+'</td>'+
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+esc(r.nota||"—")+'</td>'+
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee;text-align:right">'+(r.valor?"R$ "+esc(r.valor):"—")+'</td>'+
       '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+lbl+'</td>'+
-      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+(r.recebido_por||"—")+'</td></tr>';
+      '<td style="padding:7px 10px;border-bottom:1px solid #eee">'+esc(r.recebido_por||"—")+'</td></tr>';
   }).join("");
-  var titulo = "Recebimentos"+(fNome?" — "+fNome:"")+(fd?" — "+fd.split("-").reverse().join("/"):"");
+  var titulo = "Recebimentos"+(fNome?" — "+esc(fNome):"")+(fd?" — "+esc(fd.split("-").reverse().join("/")):"");
   var w = window.open("","_blank");
   w.document.write('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>'+titulo+'</title>'+
     '<style>body{font-family:Arial,sans-serif;color:#211d18;max-width:720px;margin:24px auto;padding:0 16px}'+
@@ -553,12 +597,57 @@ document.getElementById("fGestorForn").addEventListener("change", renderGestor);
 document.getElementById("fGestorData").addEventListener("change", renderGestor);
 document.getElementById("imprimirGestor").addEventListener("click", imprimirGestor);
 
-// ---- INIT ----
-(async function init(){
+// ---- INIT (só roda depois de autenticado) ----
+async function boot(){
+  if (_booted) return;
+  _booted = true;
   await loadFornDB();
   popularSelectForn();
   await render();
-})();
+}
+
+// ---- LOGIN / SESSÃO ----
+// As tabelas só aceitam leitura/escrita de usuários autenticados (veja
+// supabase-setup.sql). Sem login, a Supabase recusa as chamadas — esta
+// tela apenas evita mostrar o app antes de confirmar a sessão.
+function showApp(){
+  document.getElementById("gate").style.display = "none";
+  document.getElementById("app").style.display = "flex";
+  // The signature canvas measured its container while #app was
+  // display:none (0×0) on first parse — re-measure now that it's visible.
+  sizeCanvas();
+  boot();
+}
+function showGate(){
+  document.getElementById("app").style.display = "none";
+  document.getElementById("gate").style.display = "flex";
+  _booted = false; // re-run boot() on next login (e.g. after logout/switch user)
+}
+
+document.getElementById("loginForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  var btn = document.getElementById("loginBtn");
+  var errEl = document.getElementById("gateErr");
+  errEl.style.display = "none";
+  btn.disabled = true; btn.textContent = "Entrando…";
+  var email = document.getElementById("loginEmail").value.trim();
+  var password = document.getElementById("loginPassword").value;
+  var r = await sb.auth.signInWithPassword({ email: email, password: password });
+  btn.disabled = false; btn.textContent = "Entrar";
+  if (r.error) {
+    errEl.textContent = "E-mail ou senha inválidos.";
+    errEl.style.display = "block";
+  }
+  // Sucesso é tratado pelo onAuthStateChange abaixo.
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async function(){
+  await sb.auth.signOut();
+});
+
+sb.auth.onAuthStateChange(function(_event, session){
+  if (session) showApp(); else showGate();
+});
 </script>
 </body>
 </html>
