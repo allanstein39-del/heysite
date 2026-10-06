@@ -129,7 +129,7 @@ function Header({ screen, navigate }){
   const socials = [
     { id:"cardapio",  href:"https://pedido.anota.ai/loja/hey-burgers-hamburgueria?f=msa", icon:"assets/icon-cardapio.webp",  label:"Cardápio digital" },
     { id:"ifood",     href:"https://urlgeni.us/ifood/heyburgersc",                       icon:"assets/icon-ifood.webp",     label:"iFood" },
-    { id:"whatsapp",  href:"https://wa.me/5516996294093",                                 icon:"assets/icon-whats.webp",     label:"WhatsApp" },
+    { id:"whatsapp",  href:"https://wa.me/551633615093",                                 icon:"assets/icon-whats.webp",     label:"WhatsApp" },
     { id:"instagram", href:"https://www.instagram.com/heyburgers/",                       icon:"assets/icon-instagram.webp", label:"Instagram" },
   ];
 
@@ -146,7 +146,7 @@ function Header({ screen, navigate }){
         <button
           className=""
           onClick={()=>navigate("jobs")}>Trabalhe conosco</button>
-        <a className="header-nav-evento" href="https://wa.me/5516996294093?text=Ol%C3%A1%2C+tudo+bem%3F+Gostaria+de+fazer+um+evento+com+a+Hey%21&utm_source=chatgpt.com"
+        <a className="header-nav-evento" href="https://wa.me/551633615093?text=Ol%C3%A1%2C+tudo+bem%3F+Gostaria+de+fazer+um+evento+com+a+Hey%21&utm_source=chatgpt.com"
            target="_blank" rel="noopener noreferrer">Hey! no seu evento</a>
       </nav>
 
