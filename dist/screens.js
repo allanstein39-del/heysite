@@ -32,8 +32,8 @@ function HomeScreen({
   }, {
     id: "whatsapp",
     title: "WhatsApp",
-    sub: "(16) 99629-4093",
-    href: "https://wa.me/5516996294093",
+    sub: "(16) 3361-5093",
+    href: "https://wa.me/551633615093",
     icon: "assets/icon-whats.webp",
     photo: "assets/burger-03.webp"
   }, {
@@ -95,7 +95,7 @@ function HomeScreen({
     onClick: () => navigate("jobs")
   }, "Trabalhe conosco", /*#__PURE__*/React.createElement(window.Icon.Right, null)), /*#__PURE__*/React.createElement("a", {
     className: "jobs-cta jobs-cta--evento",
-    href: "https://wa.me/5516996294093?text=Ol%C3%A1%2C+tudo+bem%3F+Gostaria+de+fazer+um+evento+com+a+Hey%21&utm_source=chatgpt.com",
+    href: "https://wa.me/551633615093?text=Ol%C3%A1%2C+tudo+bem%3F+Gostaria+de+fazer+um+evento+com+a+Hey%21&utm_source=chatgpt.com",
     target: "_blank",
     rel: "noopener noreferrer"
   }, "Hey! no seu evento", /*#__PURE__*/React.createElement(window.Icon.Right, null))), /*#__PURE__*/React.createElement("div", {
